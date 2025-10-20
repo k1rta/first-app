@@ -1,18 +1,39 @@
-import { View, Text, Switch } from 'react-native';
-import React, { useState } from 'react';
+import React from 'react';
+import { View, Switch, StyleSheet } from 'react-native';
+import { useTheme } from '../context/ThemeContext';
+import { ThemedView, ThemedText } from '../components/ThemedComponents';
 
-export default function SettingsScreen () {
-  const [isDarkMode, setIsDarkMode] = useState(false);
+export default function SettingsScreen(): React.ReactElement {
+  const { theme, isDarkMode, toggleDarkMode } = useTheme();
 
   return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' , backgroundColor: 'white' }}>
-      <Text>
-        Dark mode
-      </Text>
-      <Switch
-        value={isDarkMode}
-        onValueChange={setIsDarkMode}
-      />
-    </View>
+    <ThemedView style={styles.container}>
+      <View style={styles.settingRow}>
+        <ThemedText variant="medium">Dark Mode</ThemedText>
+        <Switch
+          value={isDarkMode}
+          onValueChange={toggleDarkMode}
+          thumbColor={theme.colors.primary}
+          trackColor={{ 
+            false: theme.colors.border, 
+            true: theme.colors.primary + '40'
+          }}
+        />
+      </View>
+    </ThemedView>
   );
-};
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 16,
+  },
+  settingRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingVertical: 16,
+    paddingHorizontal: 16,
+  },
+});

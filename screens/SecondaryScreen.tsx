@@ -1,15 +1,22 @@
 import { StyleSheet, View, Text } from 'react-native';
+//Theme imports
+import { useTheme } from '../context/ThemeContext';
+import { ThemedView, ThemedText } from '../components/ThemedComponents';
+
+
 
 export default function SecondaryScreen() {
+    const { theme, isDarkMode, toggleDarkMode } = useTheme();
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>
+    <ThemedView style={styles.container}>
+      
+      <ThemedText style={styles.title}>
         Secondary Page
-      </Text>
-      <Text>
-        This is the secondary screen with themed styling.
-      </Text>
-    </View>
+      </ThemedText>
+      <ThemedText>
+        This is the secondary screen.
+      </ThemedText>
+    </ThemedView>
   );
 }
 
