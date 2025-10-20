@@ -2,6 +2,7 @@ import { createDrawerNavigator } from "@react-navigation/drawer";
 import HomeScreen from "../screens/HomeScreen";
 import { Ionicons } from "@expo/vector-icons";
 import SettingsScreen from "../screens/SettingsScreen";
+import CalculatorScreen from "../screens/CalculatorScreen";
 
 
 
@@ -11,9 +12,9 @@ export default function DrawerStack() {
     return (
       <Drawer.Navigator
         screenOptions={{
-          headerStyle: { backgroundColor: "brown" },
+          headerStyle: { backgroundColor: "#007AFF" },
           headerTintColor: "white",
-          drawerContentStyle: { backgroundColor: "brown" },
+          drawerContentStyle: { backgroundColor: "#007AFF" },
           drawerInactiveTintColor: "white",
           drawerActiveBackgroundColor: "orange",
         }}
@@ -29,8 +30,17 @@ export default function DrawerStack() {
             ),
           }}
         />
-       
-       
+        
+        <Drawer.Screen
+          name="Calculator"
+          component={CalculatorScreen}
+          options={{
+              title: "Calculator",
+              drawerIcon: ({ color, size }) => (
+                  <Ionicons name="calculator" color={color} size={size} />
+              ),
+          }}
+        />
         
         <Drawer.Screen
           name="Settings"

@@ -5,6 +5,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import ErrorBoundary from 'react-native-error-boundary';
 import DrawerStack from "./navigation/DrawerStack";
+import { ThemeProvider } from "./context/ThemeContext";
 
 import HomeScreen from './screens/HomeScreen';
 import { View, Text, StyleSheet } from 'react-native';
@@ -35,15 +36,16 @@ const App = () => {
     <ErrorBoundary FallbackComponent={ErrorFallback}>
     <SafeAreaProvider>
         <StatusBar style="light" />
-        <NavigationContainer>
+        <ThemeProvider>
+          <NavigationContainer>
           <Stack.Navigator
             screenOptions={{
               headerStyle: { 
-                backgroundColor: '#5460afff' // Red color as hex
+                backgroundColor: '#007AFF' // Blue color as hex
               },
               headerTintColor: '#ffffffff',
               contentStyle: { 
-                backgroundColor: '#e8d3d3ff' // Light gray background
+                backgroundColor: '#ffffff' // White background
               },
               // Accessibility
               headerTitleStyle: {
@@ -69,6 +71,7 @@ const App = () => {
             /> 
           </Stack.Navigator>
         </NavigationContainer>
+        </ThemeProvider>
     </SafeAreaProvider>
     </ErrorBoundary>
   );

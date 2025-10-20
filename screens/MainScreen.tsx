@@ -1,17 +1,21 @@
 import React from 'react';
 import { StyleSheet, View, Text } from 'react-native';
+//Theme imports
+import { useTheme } from '../context/ThemeContext';
+import { ThemedView, ThemedText } from '../components/ThemedComponents';
 
 
 export default function MainScreen() {
+  const { theme, isDarkMode, toggleDarkMode } = useTheme();
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>
+    <ThemedView style={styles.container}>
+      <ThemedText style={styles.title}>
         Main Page
-      </Text>
-      <Text>
+      </ThemedText>
+      <ThemedText>
         Welcome to the main screen with themed components!
-      </Text>
-    </View>
+      </ThemedText>
+    </ThemedView>
   );
 }
 
