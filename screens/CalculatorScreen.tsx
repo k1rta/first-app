@@ -10,15 +10,16 @@ import Row from "../components/CalcRow";
 import Button from "../components/CalcButton";
 import calculator, { initialState, State } from "../utils/Calculator";
 import { SafeAreaProvider } from "react-native-safe-area-context";
+import { useTheme } from "../context/ThemeContext";
 
-const styles = StyleSheet.create({
+const createStyles = (theme: any, isDarkMode: boolean) => StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#202020",
+    backgroundColor: theme.colors.background,
     justifyContent: "flex-end"
   },
   value: {
-    color: "#fff",
+    color: theme.colors.text,
     fontSize: 40,
     textAlign: "right",
     marginRight: 20,
@@ -28,56 +29,58 @@ const styles = StyleSheet.create({
 
 type TapType = "number" | "operator" | "clear" | "posneg" | "percentage" | "equal";
 
-export default class App extends React.Component<{}, State> {
-  state: State = initialState;
+const CalculatorScreen = () => {
+  const { theme, isDarkMode } = useTheme();
+  const styles = createStyles(theme, isDarkMode);
+  const [state, setState] = React.useState<State>(initialState);
 
-  handleTap = (type: TapType, value?: number | string) => {
-    this.setState(prevState => calculator(type, value, prevState));
+  const handleTap = (type: TapType, value?: number | string) => {
+    setState(prevState => calculator(type, value, prevState));
   };
 
-  render() {
-    return (
-      <View style={styles.container}>
-        <StatusBar barStyle="light-content" />
-        <SafeAreaProvider>
-          <Text style={styles.value}>
-            {parseFloat(this.state.currentValue).toLocaleString()}
-          </Text>
-          <Row>
-            <Button text="C" theme="secondary" onPress={() => this.handleTap("clear")} />
-            <Button text="+/-" theme="secondary" onPress={() => this.handleTap("posneg")} />
-            <Button text="%" theme="secondary" onPress={() => this.handleTap("percentage")} />
-            <Button text="/" theme="accent" onPress={() => this.handleTap("operator", "/")} />
-          </Row>
+  return (
+    <View style={styles.container}>
+      <StatusBar barStyle={isDarkMode ? "light-content" : "dark-content"} />
+      <SafeAreaProvider>
+        <Text style={styles.value}>
+          {parseFloat(state.currentValue).toLocaleString()}
+        </Text>
+        <Row>
+          <Button text="C" theme="secondary" onPress={() => handleTap("clear")} />
+          <Button text="+/-" theme="secondary" onPress={() => handleTap("posneg")} />
+          <Button text="%" theme="secondary" onPress={() => handleTap("percentage")} />
+          <Button text="/" theme="accent" onPress={() => handleTap("operator", "/")} />
+        </Row>
 
-          <Row>
-            <Button text="7" onPress={() => this.handleTap("number", 7)} />
-            <Button text="8" onPress={() => this.handleTap("number", 8)} />
-            <Button text="9" onPress={() => this.handleTap("number", 9)} />
-            <Button text="x" theme="accent" onPress={() => this.handleTap("operator", "*")} />
-          </Row>
+        <Row>
+          <Button text="7" onPress={() => handleTap("number", 7)} />
+          <Button text="8" onPress={() => handleTap("number", 8)} />
+          <Button text="9" onPress={() => handleTap("number", 9)} />
+          <Button text="x" theme="accent" onPress={() => handleTap("operator", "*")} />
+        </Row>
 
-          <Row>
-            <Button text="4" onPress={() => this.handleTap("number", 4)} />
-            <Button text="5" onPress={() => this.handleTap("number", 5)} />
-            <Button text="6" onPress={() => this.handleTap("number", 6)} />
-            <Button text="-" theme="accent" onPress={() => this.handleTap("operator", "-")} />
-          </Row>
+        <Row>
+          <Button text="4" onPress={() => handleTap("number", 4)} />
+          <Button text="5" onPress={() => handleTap("number", 5)} />
+          <Button text="6" onPress={() => handleTap("number", 6)} />
+          <Button text="-" theme="accent" onPress={() => handleTap("operator", "-")} />
+        </Row>
 
-          <Row>
-            <Button text="1" onPress={() => this.handleTap("number", 1)} />
-            <Button text="2" onPress={() => this.handleTap("number", 2)} />
-            <Button text="3" onPress={() => this.handleTap("number", 3)} />
-            <Button text="+" theme="accent" onPress={() => this.handleTap("operator", "+")} />
-          </Row>
+        <Row>
+          <Button text="1" onPress={() => handleTap("number", 1)} />
+          <Button text="2" onPress={() => handleTap("number", 2)} />
+          <Button text="3" onPress={() => handleTap("number", 3)} />
+          <Button text="+" theme="accent" onPress={() => handleTap("operator", "+")} />
+        </Row>
 
-          <Row>
-            <Button text="0" onPress={() => this.handleTap("number", 0)} />
-            <Button text="." onPress={() => this.handleTap("number", ".")} />
-            <Button text="=" theme="accent" onPress={() => this.handleTap("equal")} />
-          </Row>
-        </SafeAreaProvider>
-      </View>
-    );
-  }
-}
+        <Row>
+          <Button text="0" size="double" onPress={() => handleTap("number", 0)} />
+          <Button text="." onPress={() => handleTap("number", ".")} />
+          <Button text="=" theme="accent" onPress={() => handleTap("equal")} />
+        </Row>
+      </SafeAreaProvider>
+    </View>
+  );
+};
+
+export default CalculatorScreen;
