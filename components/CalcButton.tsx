@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   TouchableOpacity,
   StyleSheet,
@@ -11,11 +11,18 @@ import { useTheme } from "../context/ThemeContext";
 
 const getButtonWidth = () => {
   const screen = Dimensions.get("window");
+  const isLandscape = screen.width > screen.height;
+  
   // For web, use a fixed size that works well
   if (Platform.OS === 'web') {
     return 80;
   }
-  return screen.width / 4;
+  
+  // For mobile, adjust size based on orientation
+  if (isLandscape) {
+    return Math.min(screen.width, screen.height) / 6.5; // Much smaller buttons in landscape
+  }
+  return screen.width / 4; // Normal size in portrait
 };
 
 const createStyles = (theme: any, isDarkMode: boolean) => {
@@ -24,12 +31,12 @@ const createStyles = (theme: any, isDarkMode: boolean) => {
   return StyleSheet.create({
     text: {
       color: theme.colors.text,
-      fontSize: Platform.OS === 'web' ? 20 : 25,
+      fontSize: Platform.OS === 'web' ? 20 : (buttonWidth < 60 ? 18 : 25),
       fontWeight: '500'
     },
     textSecondary: {
       color: isDarkMode ? theme.colors.background : theme.colors.text,
-      fontSize: Platform.OS === 'web' ? 20 : 25,
+      fontSize: Platform.OS === 'web' ? 20 : (buttonWidth < 60 ? 18 : 25),
       fontWeight: '500'
     },
     button: {
@@ -39,7 +46,7 @@ const createStyles = (theme: any, isDarkMode: boolean) => {
       alignItems: "center" as "center" | "flex-start",
       justifyContent: "center",
       borderRadius: Platform.OS === 'web' ? 12 : Math.floor(buttonWidth / 2),
-      margin: 5,
+      margin: buttonWidth < 50 ? 1 : (buttonWidth < 60 ? 3 : 5),
       minWidth: Platform.OS === 'web' ? 70 : undefined,
       borderWidth: 1,
       borderColor: theme.colors.border
@@ -51,9 +58,9 @@ const createStyles = (theme: any, isDarkMode: boolean) => {
       alignItems: "flex-start" as "center" | "flex-start",
       justifyContent: "center",
       borderRadius: Platform.OS === 'web' ? 12 : Math.floor(buttonWidth / 2),
-      margin: 5,
+      margin: buttonWidth < 50 ? 1 : (buttonWidth < 60 ? 3 : 5),
       width: Platform.OS === 'web' ? 150 : Dimensions.get('window').width / 2 - 10,
-      paddingLeft: Platform.OS === 'web' ? 25 : 40,
+      paddingLeft: Platform.OS === 'web' ? 25 : (buttonWidth < 60 ? 25 : 40),
       minWidth: Platform.OS === 'web' ? 150 : undefined,
       borderWidth: 1,
       borderColor: theme.colors.border
@@ -65,7 +72,7 @@ const createStyles = (theme: any, isDarkMode: boolean) => {
       alignItems: "center" as "center" | "flex-start",
       justifyContent: "center",
       borderRadius: Platform.OS === 'web' ? 12 : Math.floor(buttonWidth / 2),
-      margin: 5,
+      margin: buttonWidth < 50 ? 1 : (buttonWidth < 60 ? 3 : 5),
       minWidth: Platform.OS === 'web' ? 70 : undefined,
       borderWidth: 1,
       borderColor: theme.colors.border
@@ -77,7 +84,7 @@ const createStyles = (theme: any, isDarkMode: boolean) => {
       alignItems: "center" as "center" | "flex-start",
       justifyContent: "center",
       borderRadius: Platform.OS === 'web' ? 12 : Math.floor(buttonWidth / 2),
-      margin: 5,
+      margin: buttonWidth < 50 ? 1 : (buttonWidth < 60 ? 3 : 5),
       minWidth: Platform.OS === 'web' ? 70 : undefined,
       borderWidth: 1,
       borderColor: theme.colors.border
@@ -94,6 +101,16 @@ type ButtonProps = {
 
 const Button: React.FC<ButtonProps> = ({ onPress, text, size, theme: buttonTheme }) => {
   const { theme, isDarkMode } = useTheme();
+  const [buttonWidth, setButtonWidth] = useState(getButtonWidth());
+  
+  useEffect(() => {
+    const subscription = Dimensions.addEventListener('change', () => {
+      setButtonWidth(getButtonWidth());
+    });
+    
+    return () => subscription?.remove();
+  }, []);
+  
   const styles = createStyles(theme, isDarkMode);
   const buttonStyles = [styles.button];
   const textStyles = [styles.text];
