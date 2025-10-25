@@ -3,6 +3,7 @@ import HomeScreen from "../screens/HomeScreen";
 import { Ionicons } from "@expo/vector-icons";
 import SettingsScreen from "../screens/SettingsScreen";
 import CalculatorScreen from "../screens/CalculatorScreen";
+import FlatListScreen from "../screens/FlatListScreen";
 
 
 
@@ -39,6 +40,17 @@ export default function DrawerStack() {
               drawerIcon: ({ color, size }) => (
                   <Ionicons name="calculator" color={color} size={size} />
               ),
+          }}
+        />
+        
+        <Drawer.Screen
+          name="Products"
+          component={FlatListScreen}
+          options={{
+            title: "Products",
+            drawerIcon: ({ color, size }) => (
+              <Ionicons name="list" color={color} size={size} />
+            ),
           }}
         />
         

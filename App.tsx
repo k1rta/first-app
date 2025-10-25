@@ -1,29 +1,33 @@
+// React and React Native
 import React from 'react';
-import { StatusBar } from 'expo-status-bar';
-import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
-import ErrorBoundary from 'react-native-error-boundary';
-import DrawerStack from "./navigation/DrawerStack";
-import { ThemeProvider } from "./context/ThemeContext";
-
-import HomeScreen from './screens/HomeScreen';
 import { View, Text, StyleSheet } from 'react-native';
 
-// Navigation types - täielik type safety
-export type RootStackParamList = {
-  Home: undefined;
-  Drawer: undefined;
-  // Tulevikus võimalike screen'ide jaoks:
-  // Profile: { userId: string };
-  // Settings: undefined;
-};
+// Navigation
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+
+// Third-party
+import { StatusBar } from 'expo-status-bar';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+import ErrorBoundary from 'react-native-error-boundary';
+
+// Local
+import DrawerStack from './navigation/DrawerStack';
+import { ThemeProvider } from './context/ThemeContext';
+import HomeScreen from './screens/HomeScreen';
+import FlatListDetailsScreen from './screens/FlatListDetailsScreen';
+import type { RootStackParamList } from './types/navigation';
+
+// Navigation types moved to types/navigation.ts for reuse
 
 // Stack Navigator instance
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
-// Error fallback component
-const ErrorFallback= ({ error }: { error: Error })  => (
+/**
+ * Error boundary fallback component
+ * Shown when an uncaught error occurs in the app
+ */
+const ErrorFallback = ({ error }: { error: Error }) => (
   <View style={styles.container}>
     <Text style={styles.title}>Something went wrong</Text>
     <Text style={styles.message}>{error.message}</Text>
@@ -66,9 +70,17 @@ const App = () => {
               component={HomeScreen}
               options={{
                 title: 'Home',
-                // Screen-specific options võivad tulla siia
+                // Screen-specific options can be added here
               }}
             /> 
+            <Stack.Screen
+              name="FlatListDetailsScreen"
+              component={FlatListDetailsScreen}
+              options={{ 
+                headerShown: true,
+                title: 'Product Details'
+              }}
+            />
           </Stack.Navigator>
         </NavigationContainer>
         </ThemeProvider>
